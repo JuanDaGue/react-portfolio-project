@@ -68,8 +68,8 @@ export default function App() {
       <div style={{position:"fixed",inset:0,backgroundImage:`linear-gradient(${light?"rgba(0,150,120,.04)":"rgba(0,245,196,.03)"} 1px,transparent 1px),linear-gradient(90deg,${light?"rgba(0,150,120,.04)":"rgba(0,245,196,.03)"} 1px,transparent 1px)`,backgroundSize:"56px 56px",pointerEvents:"none",zIndex:0,animation:"gridPulse 4s ease-in-out infinite"}}/>
 
       {/* NAV */}
-      <nav style={{flexShrink:0,position:"relative",zIndex:100,background:navBg,backdropFilter:"blur(20px)",borderBottom:`1px solid ${navBorder}`,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 16px 0 48px",height:58,transition:"background .3s,border-color .3s",boxShadow:navSolid?(light?"0 4px 20px rgba(0,0,0,.1)":"0 4px 30px rgba(0,0,0,.4)"):"none"}}>
-        <div style={{display:"flex",alignItems:"center",gap:14}}>
+      <nav className="top-nav" style={{flexShrink:0,position:"relative",zIndex:100,background:navBg,backdropFilter:"blur(20px)",borderBottom:`1px solid ${navBorder}`,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 16px 0 48px",height:58,transition:"background .3s,border-color .3s",boxShadow:navSolid?(light?"0 4px 20px rgba(0,0,0,.1)":"0 4px 30px rgba(0,0,0,.4)"):"none"}}>
+        <div className="nav-brand" style={{display:"flex",alignItems:"center",gap:14}}>
           <div style={{fontFamily:"'Orbitron',monospace",fontSize:15,fontWeight:900,letterSpacing:3,cursor:"none",transition:"text-shadow .2s"}}
             className="glow-text" onClick={()=>{setPage("home");snd.nav();}}
             onMouseEnter={e=>e.currentTarget.style.textShadow=light?"0 0 20px rgba(0,150,120,.5)":"0 0 20px rgba(0,245,196,.6)"}
@@ -77,7 +77,7 @@ export default function App() {
           <VisitCounter/>
         </div>
 
-        <div style={{display:"flex",alignItems:"center",gap:2,flexWrap:"wrap"}}>
+        <div className="nav-links" style={{display:"flex",alignItems:"center",gap:2,flexWrap:"wrap"}}>
           {NAV_ITEMS.map(n=>(
             <button key={n.id} onClick={()=>{setPage(n.id);snd.nav();}} onMouseEnter={snd.hover}
               className={`nav-btn${page===n.id?" active":""}`}
@@ -98,12 +98,12 @@ export default function App() {
 
       {/* SCROLLABLE MAIN */}
       <div id="main-scroll" style={{flex:1,overflowY:"auto",position:"relative",zIndex:1}}>
-        <main style={{paddingRight:48,minHeight:"calc(100vh - 58px)"}}>
+        <main className="app-main" style={{paddingRight:48,minHeight:"calc(100vh - 58px)"}}>
           <PageTransition pageKey={page}>
             {pages[page]}
           </PageTransition>
         </main>
-        <footer style={{borderTop:`1px solid ${light?"rgba(0,150,120,.1)":"rgba(0,245,196,.06)"}`,padding:"22px 52px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12,background:light?"rgba(230,238,248,.8)":"rgba(6,9,15,.8)"}}>
+        <footer className="app-footer" style={{borderTop:`1px solid ${light?"rgba(0,150,120,.1)":"rgba(0,245,196,.06)"}`,padding:"22px 52px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12,background:light?"rgba(230,238,248,.8)":"rgba(6,9,15,.8)"}}>
           <div style={{fontFamily:"'Orbitron',monospace",fontSize:9,color:light?"#8090a0":"#1a2530",letterSpacing:2}}>© 2025 JUAN DAVID GUERRERO UCHIMA</div>
           <div style={{display:"flex",gap:10}}>
             {SOCIALS.map(s=>(

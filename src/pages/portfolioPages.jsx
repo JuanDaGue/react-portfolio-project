@@ -9,7 +9,7 @@ export function PageTimeline() {
   const types = ["all","edu","work","game"];
   const filtered = filter==="all" ? TIMELINE : TIMELINE.filter(t=>t.type===filter);
   return (
-    <div style={{padding:"52px 52px 64px", animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px", animation:"fadeUp .5s ease both"}}>
       <SH title="Timeline" sub="Mi trayectoria en desarrollo, educación y videojuegos"/>
       <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:44}}>
         {types.map(t=>(
@@ -26,7 +26,7 @@ export function PageTimeline() {
             <div style={{flexShrink:0,width:40,display:"flex",alignItems:"flex-start",paddingTop:2,justifyContent:"center"}}>
               <div style={{width:18,height:18,borderRadius:"50%",background:`linear-gradient(135deg,${item.color},${item.color}88)`,border:`2px solid ${item.color}`,boxShadow:`0 0 12px ${item.color}55`,zIndex:1,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9}}>{TYPE_ICONS[item.type]}</div>
             </div>
-            <div style={{flex:1,background:"linear-gradient(145deg,#090e16,#0d1420)",border:`1px solid ${item.color}22`,borderRadius:10,padding:"18px 22px",transition:"border-color .2s,box-shadow .2s",cursor:"none"}}
+            <div className="theme-card timeline-card" style={{flex:1,background:"linear-gradient(145deg,#090e16,#0d1420)",border:`1px solid ${item.color}22`,borderRadius:10,padding:"18px 22px",transition:"border-color .2s,box-shadow .2s",cursor:"none"}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor=`${item.color}55`;e.currentTarget.style.boxShadow=`0 8px 30px rgba(0,0,0,.4),0 0 20px ${item.color}10`;snd.hover();}}
               onMouseLeave={e=>{e.currentTarget.style.borderColor=`${item.color}22`;e.currentTarget.style.boxShadow="none";}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,flexWrap:"wrap",gap:8}}>
@@ -53,7 +53,7 @@ export function BlogCard({ post, delay=0 }) {
   const snd = useSound();
   const [hov,setHov]=useState(false);
   return (
-    <div onMouseEnter={()=>{setHov(true);snd.hover();}} onMouseLeave={()=>setHov(false)}
+    <div className="theme-card blog-card" onMouseEnter={()=>{setHov(true);snd.hover();}} onMouseLeave={()=>setHov(false)}
       style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:`1px solid ${hov?post.tagColor+"44":"rgba(0,245,196,.1)"}`,borderRadius:12,overflow:"hidden",transition:"transform .25s cubic-bezier(.34,1.56,.64,1),border-color .2s,box-shadow .2s",transform:hov?"translateY(-5px)":"translateY(0)",boxShadow:hov?`0 20px 50px rgba(0,0,0,.5),0 0 25px ${post.tagColor}12`:"none",animation:`fadeUp .5s ease ${delay}s both`,cursor:"none"}}>
       <div style={{height:100,background:`linear-gradient(135deg,${post.tagColor}15,${post.tagColor}05)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:44,position:"relative",borderBottom:`1px solid ${post.tagColor}18`}}>
         <span style={{transition:"transform .3s",transform:hov?"scale(1.15) rotate(-5deg)":"scale(1)"}}>{post.emoji}</span>
@@ -73,12 +73,12 @@ export function BlogCard({ post, delay=0 }) {
 }
 export function PageBlog() {
   return (
-    <div style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
       <SH title="Devlog" sub="Entradas sobre proceso creativo, técnicas y aprendizajes"/>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:20}}>
         {BLOG_POSTS.map((p,i)=><BlogCard key={p.id} post={p} delay={i*.07}/>)}
       </div>
-      <div style={{marginTop:36,padding:"20px 24px",borderRadius:10,border:"1px dashed rgba(0,245,196,.15)",background:"rgba(0,245,196,.02)",display:"flex",alignItems:"center",gap:16}}>
+      <div className="theme-card devlog-note" style={{marginTop:36,padding:"20px 24px",borderRadius:10,border:"1px dashed rgba(0,245,196,.15)",background:"rgba(0,245,196,.02)",display:"flex",alignItems:"center",gap:16}}>
         <span style={{fontSize:24}}>✍️</span>
         <div>
           <div style={{fontFamily:"'Orbitron',monospace",fontSize:10,color:"#00f5c4",letterSpacing:2,marginBottom:4}}>Más entradas próximamente</div>
@@ -95,11 +95,11 @@ export function PageBlog() {
 export function PageAwards() {
   const snd = useSound();
   return (
-    <div style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
       <SH title="Awards" sub="Reconocimientos, logros y participaciones destacadas"/>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:20,marginBottom:40}}>
         {AWARDS.map((a,i)=>(
-          <div key={i} style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:`1px solid ${a.color}22`,borderRadius:12,padding:"24px 22px",animation:`fadeUp .5s ease ${i*.08}s both`,transition:"transform .25s cubic-bezier(.34,1.56,.64,1),border-color .2s,box-shadow .2s",cursor:"none"}}
+          <div key={i} className="theme-card award-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:`1px solid ${a.color}22`,borderRadius:12,padding:"24px 22px",animation:`fadeUp .5s ease ${i*.08}s both`,transition:"transform .25s cubic-bezier(.34,1.56,.64,1),border-color .2s,box-shadow .2s",cursor:"none"}}
             onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-5px)";e.currentTarget.style.borderColor=`${a.color}55`;e.currentTarget.style.boxShadow=`0 16px 40px rgba(0,0,0,.5),0 0 25px ${a.color}12`;snd.hover();}}
             onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.borderColor=`${a.color}22`;e.currentTarget.style.boxShadow="none";}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
@@ -117,7 +117,7 @@ export function PageAwards() {
       </div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:14}}>
         {[["🏆","1","Premio académico"],["🎮","1","Finalista jam"],["🔭","1","Mención científica"],["⚡","1","Contribuidor"]].map(([ico,n,l])=>(
-          <div key={l} style={{background:"linear-gradient(145deg,#090e16,#0c1220)",border:"1px solid rgba(0,245,196,.08)",borderRadius:10,padding:"16px",textAlign:"center"}}>
+          <div key={l} className="theme-card award-stat-card" style={{background:"linear-gradient(145deg,#090e16,#0c1220)",border:"1px solid rgba(0,245,196,.08)",borderRadius:10,padding:"16px",textAlign:"center"}}>
             <div style={{fontSize:26,marginBottom:6}}>{ico}</div>
             <div style={{fontFamily:"'Orbitron',monospace",fontSize:22,fontWeight:900,color:"#00f5c4",lineHeight:1}}>{n}</div>
             <div style={{fontSize:10,color:"#3a4a5a",marginTop:4,letterSpacing:1}}>{l}</div>
@@ -135,7 +135,7 @@ export function StackLogo({ item, color }) {
   const snd = useSound();
   const [hov,setHov]=useState(false);
   return (
-    <div onMouseEnter={()=>{setHov(true);snd.hover();}} onMouseLeave={()=>setHov(false)}
+    <div className="theme-card stack-card" onMouseEnter={()=>{setHov(true);snd.hover();}} onMouseLeave={()=>setHov(false)}
       style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:`1px solid ${hov?color+"66":"rgba(255,255,255,.06)"}`,borderRadius:10,padding:"20px 16px",textAlign:"center",transition:"all .25s cubic-bezier(.34,1.56,.64,1)",transform:hov?"translateY(-6px) scale(1.03)":"translateY(0) scale(1)",boxShadow:hov?`0 16px 40px rgba(0,0,0,.5),0 0 25px ${color}15`:"none",cursor:"none"}}>
       <div style={{width:44,height:44,borderRadius:10,background:hov?`${color}18`:"rgba(255,255,255,.04)",margin:"0 auto 12px",display:"flex",alignItems:"center",justifyContent:"center",color:hov?color:"#3a4a5a",transition:"all .2s",boxShadow:hov?`0 0 15px ${color}30`:"none"}}>
         <div style={{width:26,height:26}}>{item.logo}</div>
@@ -151,7 +151,7 @@ export function StackLogo({ item, color }) {
 }
 export function PageStack() {
   return (
-    <div style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
       <SH title="Tech Stack" sub="Todas las tecnologías con las que trabajo"/>
       {STACK_CATS.map((cat,ci)=>(
         <div key={ci} style={{marginBottom:44}}>
@@ -184,7 +184,7 @@ export function PageHome({ setPage }) {
   },[]);
   return(
     <div style={{animation:"fadeUp .6s ease both"}}>
-      <div style={{position:"relative",padding:"90px 52px 80px",minHeight:"80vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden"}}>
+      <div className="home-hero" style={{position:"relative",padding:"90px 52px 80px",minHeight:"80vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden"}}>
         {/* Parallax layer 1 — large teal blob, slow */}
         <div style={{position:"absolute",top:`${15+mousePos.y*8}%`,right:`${2+mousePos.x*4}%`,width:700,height:700,background:"radial-gradient(circle,rgba(0,245,196,.07) 0%,transparent 60%)",pointerEvents:"none",transition:"top 1.2s cubic-bezier(.25,.46,.45,.94),right 1.2s cubic-bezier(.25,.46,.45,.94)"}}/>
         {/* Parallax layer 2 — pink blob, medium */}
@@ -196,7 +196,7 @@ export function PageHome({ setPage }) {
         {/* Parallax layer 5 — violet, counter-move */}
         <div style={{position:"absolute",top:`${25-mousePos.y*5}%`,left:`${25-mousePos.x*3}%`,width:320,height:320,background:"radial-gradient(circle,rgba(167,139,250,.04) 0%,transparent 70%)",pointerEvents:"none",transition:"top .7s ease,left .7s ease"}}/>
         <div style={{position:"relative",zIndex:1}}>
-          <div style={{display:"flex",alignItems:"center",gap:24,marginBottom:32}}>
+          <div className="hero-intro" style={{display:"flex",alignItems:"center",gap:24,marginBottom:32}}>
             <Avatar size={100}/>
             <div>
               <div style={{display:"inline-flex",alignItems:"center",gap:8,fontFamily:"'Orbitron',monospace",fontSize:10,fontWeight:700,letterSpacing:3,color:"#00f5c4",border:"1px solid rgba(0,245,196,.4)",padding:"5px 14px",borderRadius:2,marginBottom:10,textTransform:"uppercase",animation:"borderGlow 3s ease-in-out infinite",backdropFilter:"blur(8px)",background:"rgba(0,245,196,.04)"}}>
@@ -225,7 +225,7 @@ export function PageHome({ setPage }) {
             <button className="btn-primary" onClick={()=>setPage("portfolio")}>Ver Proyectos ↗</button>
             <button className="btn-ghost" onClick={()=>setPage("contact")}>Contactar</button>
           </div>
-          <div style={{display:"flex",gap:44,flexWrap:"wrap"}}>
+          <div className="hero-stats" style={{display:"flex",gap:44,flexWrap:"wrap"}}>
             {[["5","Proyectos"],["2+","Años Web"],["80%+","Unreal"],["3","Plataformas"]].map(([n,l],i)=>(
               <div key={l} style={{textAlign:"center",animation:`countUp .5s ease ${i*.1+.5}s both`}}>
                 <span style={{fontFamily:"'Orbitron',monospace",fontSize:36,fontWeight:900,display:"block",lineHeight:1,background:`linear-gradient(135deg,#00f5c4,#5b9cf6)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{n}</span>
@@ -241,10 +241,10 @@ export function PageHome({ setPage }) {
 
 export function PageAbout() {
   return(
-    <div style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
       <SH title="About Me" sub="Desarrollador indie apasionado por crear experiencias únicas"/>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:24}}>
-        <div style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.12)",borderRadius:12,padding:"30px 28px",boxShadow:"0 8px 40px rgba(0,0,0,.3)"}}>
+        <div className="theme-card about-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.12)",borderRadius:12,padding:"30px 28px",boxShadow:"0 8px 40px rgba(0,0,0,.3)"}}>
           <div style={{display:"flex",alignItems:"center",gap:18,marginBottom:28}}>
             <Avatar size={80} light={false}/>
             <div>
@@ -265,7 +265,7 @@ export function PageAbout() {
           </button>
         </div>
         <div style={{display:"flex",flexDirection:"column",gap:20}}>
-          <div style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"24px 26px"}}>
+          <div className="theme-card skills-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"24px 26px"}}>
             <div style={{fontFamily:"'Orbitron',monospace",fontSize:10,fontWeight:700,letterSpacing:3,color:"#00f5c4",textTransform:"uppercase",marginBottom:18}}>Skills</div>
             {SKILLS.map((s,si)=>(
               <div key={s.cat} style={{marginBottom:20}}>
@@ -274,7 +274,7 @@ export function PageAbout() {
               </div>
             ))}
           </div>
-          <div style={{background:"linear-gradient(145deg,#080d18,#0c1225)",border:"1px solid rgba(91,156,246,.2)",borderRadius:12,padding:"20px 24px",boxShadow:"0 0 30px rgba(91,156,246,.05)"}}>
+          <div className="theme-card feature-card" style={{background:"linear-gradient(145deg,#080d18,#0c1225)",border:"1px solid rgba(91,156,246,.2)",borderRadius:12,padding:"20px 24px",boxShadow:"0 0 30px rgba(91,156,246,.05)"}}>
             <div style={{fontSize:13,fontWeight:600,color:"#5b9cf6",marginBottom:8,display:"flex",alignItems:"center",gap:8}}>🔭 BioAstronomía VR</div>
             <p style={{fontSize:13,color:"#5a6a7a",lineHeight:1.7}}>Propuesta educativa: telescopio virtual para niños, observar planetas y evaluar habitabilidad con criterios de astrobiología.</p>
           </div>
@@ -286,7 +286,7 @@ export function PageAbout() {
 
 export function PageServices() {
   return(
-    <div style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
       <SH title="Services" sub="Lo que puedo construir para ti"/>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",gap:18}}>
         {SERVICES.map((s,i)=>(
@@ -314,7 +314,7 @@ export function PagePortfolio() {
   });
 
   return(
-    <div style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
       <SH title="Portfolio" sub="Proyectos reales construidos con pasión"/>
       <Carousel/>
 
@@ -377,11 +377,11 @@ export function PagePortfolio() {
 
 export function PageReferences() {
   return(
-    <div style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
       <SH title="References" sub="Lo que dicen quienes han trabajado conmigo"/>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(270px,1fr))",gap:20}}>
         {REFERENCES.map((r,i)=>(
-          <div key={i} className="card-hover" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"28px 24px",animation:`fadeUp .5s ease ${i*.1}s both`,cursor:"none"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(0,245,196,.3)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(0,245,196,.1)";}}>
+          <div key={i} className="theme-card reference-card card-hover" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"28px 24px",animation:`fadeUp .5s ease ${i*.1}s both`,cursor:"none"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(0,245,196,.3)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(0,245,196,.1)";}}>
             <div style={{fontSize:44,color:"rgba(0,245,196,.12)",fontFamily:"Georgia,serif",lineHeight:1,marginBottom:12}}>&ldquo;</div>
             <p style={{fontSize:14,color:"#7a8a9a",lineHeight:1.85,marginBottom:22,fontStyle:"italic"}}>{r.quote}</p>
             <div style={{display:"flex",alignItems:"center",gap:14,paddingTop:16,borderTop:"1px solid rgba(0,245,196,.07)"}}>
@@ -404,10 +404,10 @@ export function PageContact() {
   const handle=(k,v)=>setForm(f=>({...f,[k]:v}));
   const submit=()=>{if(form.name&&form.email&&form.msg)setSent(true);};
   return(
-    <div style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
+    <div className="page-shell" style={{padding:"52px 52px 64px",animation:"fadeUp .5s ease both"}}>
       <SH title="Contact" sub="Hablemos sobre tu próximo proyecto"/>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(290px,1fr))",gap:24,maxWidth:880}}>
-        <div style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.12)",borderRadius:12,padding:"28px 28px"}}>
+        <div className="theme-card contact-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.12)",borderRadius:12,padding:"28px 28px"}}>
           {sent?(
             <div style={{textAlign:"center",padding:"44px 0"}}>
               <div style={{fontSize:52,marginBottom:16,animation:"floatY 2s ease-in-out infinite"}}>✅</div>
@@ -427,7 +427,7 @@ export function PageContact() {
           )}
         </div>
         <div style={{display:"flex",flexDirection:"column",gap:18}}>
-          <div style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"24px 26px"}}>
+          <div className="theme-card contact-info-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"24px 26px"}}>
             <div style={{fontFamily:"'Orbitron',monospace",fontSize:10,fontWeight:700,letterSpacing:3,color:"#00f5c4",textTransform:"uppercase",marginBottom:16}}>Info de contacto</div>
             {[["📍","Ubicación","Medellín, Colombia"],["✉️","Email","juandague@email.com"],["💼","Disponible","Proyectos freelance abiertos"]].map(([ico,k,v])=>(
               <div key={k} style={{display:"flex",gap:12,marginBottom:14,alignItems:"flex-start"}}>
@@ -436,7 +436,7 @@ export function PageContact() {
               </div>
             ))}
           </div>
-          <div style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"22px 24px"}}>
+          <div className="theme-card contact-social-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"22px 24px"}}>
             <div style={{fontFamily:"'Orbitron',monospace",fontSize:10,fontWeight:700,letterSpacing:3,color:"#00f5c4",textTransform:"uppercase",marginBottom:14}}>Redes Sociales</div>
             <div style={{display:"flex",flexDirection:"column",gap:8}}>
               {SOCIALS.map(s=>(

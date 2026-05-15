@@ -38,8 +38,8 @@ export function CustomCursor() {
 
   return (
     <>
-      <div ref={dotRef} style={{position:'fixed',top:0,left:0,width:8,height:8,borderRadius:'50%',background:hovering?'#ff3d6b':'#00f5c4',zIndex:99999,pointerEvents:'none',boxShadow:hovering?'0 0 10px #ff3d6b':'0 0 10px #00f5c4',transition:'background .15s,box-shadow .15s'}}/>
-      <div ref={ringRef} style={{position:'fixed',top:0,left:0,width:32,height:32,borderRadius:'50%',border:`1.5px solid ${hovering?'rgba(255,61,107,.6)':'rgba(0,245,196,.5)'}`,zIndex:99998,pointerEvents:'none',transform:clicking?'scale(.75)':'scale(1)',transition:'border-color .15s,transform .1s'}}/>
+      <div className="custom-cursor-dot" ref={dotRef} style={{position:'fixed',top:0,left:0,width:8,height:8,borderRadius:'50%',background:hovering?'#ff3d6b':'#00f5c4',zIndex:99999,pointerEvents:'none',boxShadow:hovering?'0 0 10px #ff3d6b':'0 0 10px #00f5c4',transition:'background .15s,box-shadow .15s'}}/>
+      <div className="custom-cursor-ring" ref={ringRef} style={{position:'fixed',top:0,left:0,width:32,height:32,borderRadius:'50%',border:`1.5px solid ${hovering?'rgba(255,61,107,.6)':'rgba(0,245,196,.5)'}`,zIndex:99998,pointerEvents:'none',transform:clicking?'scale(.75)':'scale(1)',transition:'border-color .15s,transform .1s'}}/>
     </>
   );
 }
@@ -207,7 +207,7 @@ export function ScrollToTop() {
 export function SocialSidebar() {
   const [hov,setHov]=useState(null);
   return(
-    <div style={{position:"fixed",right:0,top:"50%",transform:"translateY(-50%)",zIndex:200,display:"flex",flexDirection:"column",gap:1}}>
+    <div className="social-sidebar" style={{position:"fixed",right:0,top:"50%",transform:"translateY(-50%)",zIndex:200,display:"flex",flexDirection:"column",gap:1}}>
       {SOCIALS.map(s=>(
         <a key={s.id} href={s.href} target="_blank" rel="noreferrer"
           onMouseEnter={()=>setHov(s.id)} onMouseLeave={()=>setHov(null)}
@@ -233,7 +233,7 @@ export function ProjectCard({ p, delay=0 }) {
     setTilt({x:y*8,y:-x*8});
   };
   return(
-    <div ref={cardRef} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>{setHov(false);setTilt({x:0,y:0});}} onMouseMove={onMove}
+    <div className="theme-card project-card" ref={cardRef} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>{setHov(false);setTilt({x:0,y:0});}} onMouseMove={onMove}
       style={{background:hov?"linear-gradient(145deg,#0e1520,#111825)":"#0a0f18",border:`1px solid ${hov?p.tagColor+"55":"rgba(0,245,196,.1)"}`,borderRadius:12,overflow:"hidden",transform:hov?`perspective(600px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-6px)`:"perspective(600px) rotateX(0) rotateY(0) translateY(0)",transition:"transform .2s ease,border-color .25s,background .25s,box-shadow .25s",boxShadow:hov?`0 20px 50px rgba(0,0,0,.6),0 0 30px ${p.tagColor}15`:"0 4px 20px rgba(0,0,0,.3)",display:"flex",flexDirection:"column",animation:`fadeUp .5s ease ${delay}s both`}}>
       <div style={{height:185,position:"relative",overflow:"hidden",display:"flex",alignItems:"center",justifyContent:"center",background:"linear-gradient(135deg,#050810,#0e0520)"}}>
         {p.img?<img src={`data:image/jpeg;base64,${p.img}`} alt={p.title} style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0,transition:"transform .5s ease",transform:hov?"scale(1.07)":"scale(1)"}}/>:<span style={{fontSize:52,animation:hov?"floatY 2s ease-in-out infinite":"none"}}>{p.emoji}</span>}
@@ -265,12 +265,12 @@ export function Carousel() {
   const cur=items[active];
   if(!cur) return null;
   return(
-    <div style={{borderRadius:14,overflow:"hidden",marginBottom:44,border:"1px solid rgba(0,245,196,.18)",boxShadow:"0 24px 80px rgba(0,0,0,.6),0 0 40px rgba(0,245,196,.04)"}}>
-      <div style={{position:"relative",height:"clamp(240px,38vw,420px)",overflow:"hidden",opacity:trans?0:1,transition:"opacity .32s"}}>
+    <div className="portfolio-carousel" style={{borderRadius:14,overflow:"hidden",marginBottom:44,border:"1px solid rgba(0,245,196,.18)",boxShadow:"0 24px 80px rgba(0,0,0,.6),0 0 40px rgba(0,245,196,.04)"}}>
+      <div className="carousel-stage" style={{position:"relative",height:"clamp(240px,38vw,420px)",overflow:"hidden",opacity:trans?0:1,transition:"opacity .32s"}}>
         <img src={`data:image/jpeg;base64,${cur.img}`} alt={cur.title} style={{width:"100%",height:"100%",objectFit:"cover",transform:trans?"scale(1.05)":"scale(1)",transition:"transform .6s ease"}}/>
         <div style={{position:"absolute",inset:0,background:"linear-gradient(105deg,rgba(6,9,15,.92) 0%,rgba(6,9,15,.4) 50%,rgba(6,9,15,.7) 100%)"}}/>
         <div style={{position:"absolute",inset:0,backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px)",pointerEvents:"none"}}/>
-        <div style={{position:"absolute",inset:0,padding:"32px 40px",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+        <div className="carousel-content" style={{position:"absolute",inset:0,padding:"32px 40px",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
           <span style={{display:"inline-block",fontFamily:"'Orbitron',monospace",fontSize:8,letterSpacing:3,textTransform:"uppercase",padding:"4px 11px",borderRadius:2,background:cur.tagColor+"22",color:cur.tagColor,border:`1px solid ${cur.tagColor}55`,marginBottom:12,width:"fit-content",backdropFilter:"blur(4px)"}}>{cur.tag}</span>
           <div style={{fontFamily:"'Orbitron',monospace",fontWeight:900,fontSize:"clamp(22px,3.8vw,40px)",color:"#fff",lineHeight:1.1,marginBottom:8,textShadow:`0 2px 30px rgba(0,0,0,.9),0 0 40px ${cur.tagColor}30`}}>{cur.title}</div>
           <div style={{fontSize:10,color:cur.tagColor,letterSpacing:3,textTransform:"uppercase",marginBottom:12,fontFamily:"'Orbitron',monospace"}}>{cur.genre}</div>
@@ -281,7 +281,7 @@ export function Carousel() {
           {cur.repoUrl&&<RepoLink url={cur.repoUrl} label="Ver repositorio"/>}
         </div>
         {[{d:-1,l:"‹",s:"left"},{d:1,l:"›",s:"right"}].map(({d,l,s})=>(
-          <button key={s} onClick={()=>goTo(active+d)} style={{position:"absolute",top:"50%",[s]:16,transform:"translateY(-50%)",width:40,height:40,borderRadius:"50%",background:"rgba(0,0,0,.6)",border:"1px solid rgba(0,245,196,.25)",color:"#00f5c4",fontSize:22,cursor:"none",display:"flex",alignItems:"center",justifyContent:"center",zIndex:10,backdropFilter:"blur(6px)",transition:"all .2s"}} onMouseEnter={e=>{e.currentTarget.style.background="rgba(0,245,196,.15)";e.currentTarget.style.borderColor="#00f5c4";e.currentTarget.style.boxShadow="0 0 20px rgba(0,245,196,.3)";}} onMouseLeave={e=>{e.currentTarget.style.background="rgba(0,0,0,.6)";e.currentTarget.style.borderColor="rgba(0,245,196,.25)";e.currentTarget.style.boxShadow="none";}}>{l}</button>
+          <button className="carousel-arrow" key={s} onClick={()=>goTo(active+d)} style={{position:"absolute",top:"50%",[s]:16,transform:"translateY(-50%)",width:40,height:40,borderRadius:"50%",background:"rgba(0,0,0,.6)",border:"1px solid rgba(0,245,196,.25)",color:"#00f5c4",fontSize:22,cursor:"none",display:"flex",alignItems:"center",justifyContent:"center",zIndex:10,backdropFilter:"blur(6px)",transition:"all .2s"}} onMouseEnter={e=>{e.currentTarget.style.background="rgba(0,245,196,.15)";e.currentTarget.style.borderColor="#00f5c4";e.currentTarget.style.boxShadow="0 0 20px rgba(0,245,196,.3)";}} onMouseLeave={e=>{e.currentTarget.style.background="rgba(0,0,0,.6)";e.currentTarget.style.borderColor="rgba(0,245,196,.25)";e.currentTarget.style.boxShadow="none";}}>{l}</button>
         ))}
         <div style={{position:"absolute",bottom:0,left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,${cur.tagColor}88,transparent)`,opacity:.6}}/>
       </div>
@@ -1050,4 +1050,3 @@ export function AchievementsButton({ unlocked, onClick }) {
     </button>
   );
 }
-
