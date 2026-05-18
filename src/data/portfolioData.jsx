@@ -62,7 +62,7 @@ export const SOCIALS = [
   { id:"youtube",   label:"YouTube",   href:"https://youtube.com/@tu_canal",     color:"#ff0000", Ico: IcoYouTube },
   { id:"discord",   label:"Discord",   href:"https://discord.gg/tu_servidor",    color:"#5865f2", Ico: IcoDiscord },
   { id:"linkedin",  label:"LinkedIn",  href:"https://www.linkedin.com/in/juan-david-guerrero-uchima-b94ab3226/", color:"#0a66c2", Ico: IcoLinkedIn },
-  { id:"itchio",    label:"itch.io",   href:"https://tu_usuario.itch.io",        color:"#fa5c5c", Ico: IcoItchio },
+  { id:"itchio",    label:"itch.io",   href:"https://hades2019.itch.io/",        color:"#fa5c5c", Ico: IcoItchio },
   { id:"github",    label:"GitHub",    href:"https://github.com/JuanDaGue",      color:"#e8eaf0", Ico: IcoGitHub },
 ];
 /* Extra nav icons */

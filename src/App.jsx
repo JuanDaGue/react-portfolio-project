@@ -80,7 +80,7 @@ export default function App() {
         <div className="nav-links" style={{display:"flex",alignItems:"center",gap:2,flexWrap:"wrap"}}>
           {NAV_ITEMS.map(n=>(
             <button key={n.id} onClick={()=>{setPage(n.id);snd.nav();}} onMouseEnter={snd.hover}
-              className={`nav-btn${page===n.id?" active":""}`}
+              className={`nav-btn nav-${n.id}${page===n.id?" active":""}`}
               style={{color:page===n.id?(light?"#007a62":"#00f5c4"):(light?"#3a5060":"#4a5a6a")}}>
               <n.Ico/>{n.label}
             </button>

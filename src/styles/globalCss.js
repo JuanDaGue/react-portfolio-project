@@ -416,7 +416,7 @@ export const GLOBAL_CSS = `
     }
     .nav-links {
       flex: 1 !important;
-      justify-content: flex-end !important;
+      justify-content: flex-start !important;
       gap: 6px !important;
       max-height: 44px !important;
       overflow-x: auto !important;
@@ -428,14 +428,15 @@ export const GLOBAL_CSS = `
     .nav-links::-webkit-scrollbar { display: none; }
     .nav-btn {
       flex: 0 0 auto !important;
-      width: 38px !important;
+      width: auto !important;
+      min-width: 92px !important;
       height: 38px !important;
-      padding: 0 !important;
+      padding: 0 10px !important;
       justify-content: center !important;
       border-radius: 8px !important;
-      letter-spacing: 0 !important;
-      font-size: 0 !important;
-      gap: 0 !important;
+      letter-spacing: .8px !important;
+      font-size: 8px !important;
+      gap: 5px !important;
     }
     .nav-btn svg {
       width: 17px !important;
@@ -445,6 +446,16 @@ export const GLOBAL_CSS = `
       flex: 0 0 auto !important;
       margin-left: 4px !important;
     }
+    .nav-home { order: 0; }
+    .nav-portfolio { order: 1; }
+    .nav-about { order: 2; }
+    .nav-services { order: 3; }
+    .nav-timeline { order: 4; }
+    .nav-blog { order: 5; }
+    .nav-awards { order: 6; }
+    .nav-stack { order: 7; }
+    .nav-references { order: 8; }
+    .nav-contact { order: 9; }
     .theme-toggle {
       width: 42px !important;
       height: 24px !important;
@@ -592,6 +603,10 @@ export const GLOBAL_CSS = `
     }
     .nav-links {
       max-width: calc(100vw - 62px) !important;
+    }
+    .nav-btn {
+      min-width: 86px !important;
+      padding: 0 9px !important;
     }
     .page-shell {
       padding-left: 14px !important;
