@@ -89,6 +89,156 @@ export const GLOBAL_CSS = `
   .btn-ghost:hover::after { opacity:1; }
   .btn-ghost:hover { border-color: rgba(0,245,196,.9); box-shadow: 0 0 20px rgba(0,245,196,.2), inset 0 0 20px rgba(0,245,196,.04); transform: translateY(-2px); }
 
+  .video-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 31px;
+    padding: 7px 14px;
+    border-radius: 2px;
+    border: 1px solid rgba(255,61,107,.38);
+    background: rgba(255,61,107,.07);
+    color: #ff6f91;
+    font-family: 'Orbitron',monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: none;
+    transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
+  }
+  .video-action-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,61,107,.9);
+    background: rgba(255,61,107,.14);
+    box-shadow: 0 0 18px rgba(255,61,107,.22);
+  }
+  .video-action-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1px;
+    background: #ff3d6b;
+    color: #06090f;
+    font-size: 8px;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+  .project-play-badge {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(6,9,15,.72);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 2px;
+    font-size: 14px;
+    cursor: none;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 28px rgba(0,0,0,.45);
+    transition: transform .2s, background .2s, border-color .2s, box-shadow .2s;
+  }
+  .project-play-badge:hover {
+    transform: scale(1.08);
+    background: rgba(255,61,107,.85);
+    border-color: rgba(255,255,255,.55);
+    box-shadow: 0 0 26px rgba(255,61,107,.35);
+  }
+  .video-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9200;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.82);
+    backdrop-filter: blur(14px);
+    animation: fadeIn .18s ease both;
+  }
+  .video-modal-panel {
+    width: min(1040px, 94vw);
+    max-height: 90vh;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid rgba(0,245,196,.24);
+    background: linear-gradient(145deg,#090e16,#0d1420);
+    box-shadow: 0 28px 90px rgba(0,0,0,.82), 0 0 42px rgba(0,245,196,.12);
+  }
+  .video-modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 17px 18px 15px 22px;
+    border-bottom: 1px solid rgba(0,245,196,.12);
+  }
+  .video-modal-kicker {
+    font-family: 'Orbitron',monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #00f5c4;
+    margin-bottom: 5px;
+  }
+  .video-modal-title {
+    font-family: 'Orbitron',monospace;
+    font-size: 15px;
+    font-weight: 800;
+    color: #e8eef8;
+  }
+  .video-modal-close {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,61,107,.45);
+    background: rgba(255,61,107,.08);
+    color: #ff6f91;
+    font-size: 24px;
+    line-height: 1;
+    cursor: none;
+    transition: transform .2s, background .2s, border-color .2s;
+  }
+  .video-modal-close:hover {
+    transform: rotate(90deg) scale(1.06);
+    background: rgba(255,61,107,.18);
+    border-color: rgba(255,61,107,.9);
+  }
+  .video-frame-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #020509;
+  }
+  .video-frame-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .light .video-action-btn {
+    background: rgba(255,61,107,.08);
+    color: #b51f4b;
+    border-color: rgba(181,31,75,.28);
+  }
+  .light .video-modal-panel {
+    background: linear-gradient(145deg,#ffffff,#f4f8ff);
+    border-color: rgba(0,150,120,.18);
+    box-shadow: 0 24px 70px rgba(20,45,70,.22);
+  }
+  .light .video-modal-title { color: #142235; }
+
   /* Theme toggle */
   .theme-toggle {
     position: relative; width: 48px; height: 26px; border-radius: 13px; border: 1px solid rgba(0,245,196,.3);
@@ -321,6 +471,26 @@ export const GLOBAL_CSS = `
   .light .project-card [style*="rgba(6,9,15,.5)"] {
     background: linear-gradient(180deg,transparent 40%,rgba(244,248,255,.78)) !important;
   }
+  .light .compact-summary-card,
+  .light .compact-contact-card,
+  .light .compact-social-card {
+    background: linear-gradient(145deg,#ffffff,#f4f8ff) !important;
+    border-color: rgba(0,150,120,.16) !important;
+    box-shadow: 0 12px 32px rgba(20,45,70,.08) !important;
+  }
+  .compact-toggle {
+    margin-left: 8px;
+    padding: 8px 14px !important;
+    font-size: 8px !important;
+    white-space: nowrap;
+  }
+  .compact-shell {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+  .compact-shell section {
+    scroll-margin-top: 82px;
+  }
   .nav-btn {
     position:relative; overflow:hidden;
     font-family:'Orbitron',monospace; font-size:8px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
@@ -497,6 +667,16 @@ export const GLOBAL_CSS = `
       justify-content: center !important;
       text-align: center !important;
     }
+    .compact-shell {
+      padding: 34px 22px 48px !important;
+    }
+    .compact-hero {
+      grid-template-columns: 1fr !important;
+      gap: 24px !important;
+    }
+    .compact-toggle {
+      display: none !important;
+    }
   }
 
   @media (max-width: 640px) {
@@ -591,6 +771,35 @@ export const GLOBAL_CSS = `
     }
     input, textarea {
       font-size: 16px !important;
+    }
+    .compact-shell [style*="grid-template-columns"] {
+      grid-template-columns: 1fr !important;
+    }
+    .compact-shell .btn-primary,
+    .compact-shell .btn-ghost {
+      width: 100% !important;
+      justify-content: center !important;
+      text-align: center !important;
+    }
+    .video-modal-backdrop {
+      padding: 14px !important;
+      align-items: center !important;
+    }
+    .video-modal-panel {
+      width: 100% !important;
+      border-radius: 10px !important;
+    }
+    .video-modal-head {
+      padding: 14px !important;
+    }
+    .video-modal-title {
+      font-size: 12px !important;
+      line-height: 1.35 !important;
+    }
+    .video-action-btn {
+      flex: 1 1 auto;
+      justify-content: center;
+      min-width: 136px;
     }
   }
 

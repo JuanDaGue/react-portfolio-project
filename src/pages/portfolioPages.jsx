@@ -173,6 +173,77 @@ export function PageStack() {
   );
 }
 
+export function PageCompactPortfolio({ setExtended }) {
+  const featured = PROJECTS.slice(0, 6);
+  return (
+    <div className="compact-shell" style={{padding:"54px 52px 72px",animation:"fadeUp .5s ease both"}}>
+      <section className="compact-hero" style={{display:"grid",gridTemplateColumns:"minmax(0,1.05fr) minmax(280px,.95fr)",gap:36,alignItems:"center",marginBottom:52}}>
+        <div>
+          <div style={{display:"inline-flex",alignItems:"center",gap:8,fontFamily:"'Orbitron',monospace",fontSize:10,fontWeight:700,letterSpacing:3,color:"#00f5c4",border:"1px solid rgba(0,245,196,.35)",padding:"5px 14px",borderRadius:2,marginBottom:16,textTransform:"uppercase",background:"rgba(0,245,196,.04)"}}>
+            <span style={{width:6,height:6,borderRadius:"50%",background:"#00f5c4",animation:"pulse 1.5s ease-in-out infinite"}}/>
+            Portfolio resumido
+          </div>
+          <h1 className="glow-text" style={{fontFamily:"'Orbitron',monospace",fontSize:"clamp(34px,5vw,62px)",fontWeight:900,lineHeight:1.05,marginBottom:18}}>Juan David<br/>Guerrero Uchima</h1>
+          <p style={{fontSize:16,lineHeight:1.85,color:"#8090a0",maxWidth:640,marginBottom:28}}>
+            Desarrollador web y game developer. Actualmente trabajo con Unity y Unreal Engine, incluyendo FreakFall como proyecto activo en Unreal.
+          </p>
+          <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+            <a className="btn-primary" href="#compact-projects" style={{textDecoration:"none",display:"inline-flex",alignItems:"center"}}>Ver proyectos</a>
+            <a className="btn-ghost" href="#compact-contact" style={{textDecoration:"none",display:"inline-flex",alignItems:"center"}}>Contacto</a>
+            <button className="btn-ghost" onClick={()=>setExtended(true)}>Versión extendida</button>
+          </div>
+        </div>
+        <div className="theme-card compact-summary-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.12)",borderRadius:12,padding:"28px 28px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:14}}>
+            {[["5","Proyectos"],["2+","Años web"],["80%+","Unreal"],["VR","Experiencias"]].map(([n,l])=>(
+              <div key={l} style={{padding:"16px 14px",border:"1px solid rgba(0,245,196,.08)",borderRadius:8,background:"rgba(0,245,196,.035)"}}>
+                <div style={{fontFamily:"'Orbitron',monospace",fontSize:26,fontWeight:900,color:"#00f5c4",lineHeight:1}}>{n}</div>
+                <div style={{fontSize:10,color:"#3a4a5a",letterSpacing:1.5,textTransform:"uppercase",marginTop:6}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="compact-projects" style={{marginBottom:56}}>
+        <SH title="Projects" sub="Una selección rápida de mis proyectos principales"/>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(270px,1fr))",gap:20}}>
+          {featured.map((p,i)=><ProjectCard key={p.id} p={p} delay={i*.06}/>)}
+        </div>
+      </section>
+
+      <section id="compact-contact">
+        <SH title="Contact" sub="Hablemos sobre videojuegos, web o experiencias interactivas"/>
+        <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) minmax(280px,420px)",gap:22,alignItems:"stretch"}}>
+          <div className="theme-card compact-contact-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.12)",borderRadius:12,padding:"28px"}}>
+            <div style={{fontFamily:"'Orbitron',monospace",fontSize:13,fontWeight:700,color:"#00f5c4",letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>Disponible para proyectos</div>
+            <p style={{fontSize:14,color:"#6a7a8a",lineHeight:1.8,marginBottom:22}}>
+              Si quieres revisar mi trabajo completo, puedes abrir la versión extendida. Si ya tienes una idea clara, escríbeme directamente.
+            </p>
+            <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+              <a className="btn-primary" href="mailto:juandague@email.com" style={{textDecoration:"none",display:"inline-flex",alignItems:"center"}}>Enviar email</a>
+              <button className="btn-ghost" onClick={()=>setExtended(true)}>Ver todo</button>
+            </div>
+          </div>
+          <div className="theme-card compact-social-card" style={{background:"linear-gradient(145deg,#090e16,#0d1420)",border:"1px solid rgba(0,245,196,.1)",borderRadius:12,padding:"22px 24px"}}>
+            <div style={{fontFamily:"'Orbitron',monospace",fontSize:10,fontWeight:700,letterSpacing:3,color:"#00f5c4",textTransform:"uppercase",marginBottom:14}}>Redes</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              {SOCIALS.map(s=>(
+                <a key={s.id} href={s.href} target="_blank" rel="noreferrer"
+                  style={{display:"flex",alignItems:"center",gap:12,padding:"10px 14px",borderRadius:7,border:"1px solid rgba(255,255,255,.05)",background:"rgba(0,0,0,.2)",textDecoration:"none",color:"#5a6a7a",transition:"all .22s"}}>
+                  <span style={{display:"flex",alignItems:"center",flexShrink:0,color:s.color}}><s.Ico/></span>
+                  <span style={{fontFamily:"'Orbitron',monospace",fontSize:9,fontWeight:700,letterSpacing:1.5,textTransform:"uppercase"}}>{s.label}</span>
+                  <span style={{marginLeft:"auto",fontSize:12,opacity:.3}}>→</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 
 
 export function PageHome({ setPage }) {

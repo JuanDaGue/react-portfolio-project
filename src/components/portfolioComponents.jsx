@@ -221,9 +221,62 @@ export function SocialSidebar() {
 }
 
 /* ─── PROJECT CARD ────────────────────────────────────────── */
+function getYouTubeEmbedUrl(url) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace("www.", "");
+    const id = host === "youtu.be" ? parsed.pathname.slice(1) : parsed.searchParams.get("v");
+    return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1` : url;
+  } catch {
+    return url;
+  }
+}
+
+export function VideoModal({ project, onClose }) {
+  useEffect(() => {
+    const onKey = e => { if(e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  if(!project?.videoUrl) return null;
+  return (
+    <div className="video-modal-backdrop" role="presentation" onMouseDown={onClose}>
+      <div className="video-modal-panel" role="dialog" aria-modal="true" aria-label={`Video de ${project.title}`} onMouseDown={e=>e.stopPropagation()}>
+        <div className="video-modal-head">
+          <div>
+            <div className="video-modal-kicker">Gameplay video</div>
+            <div className="video-modal-title">{project.title}</div>
+          </div>
+          <button className="video-modal-close" onClick={onClose} aria-label="Cerrar video">×</button>
+        </div>
+        <div className="video-frame-wrap">
+          <iframe
+            src={getYouTubeEmbedUrl(project.videoUrl)}
+            title={`Video de ${project.title}`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function VideoButton({ project, onClick }) {
+  if(!project?.videoUrl) return null;
+  return (
+    <button className="video-action-btn" onClick={onClick} aria-label={`Ver video de ${project.title}`}>
+      <span className="video-action-icon">▶</span>
+      <span>Ver video</span>
+    </button>
+  );
+}
+
 export function ProjectCard({ p, delay=0 }) {
   const [hov,setHov]=useState(false);
   const [tilt,setTilt]=useState({x:0,y:0});
+  const [videoProject,setVideoProject]=useState(null);
   const cardRef=useRef(null);
   const onMove = e => {
     const r = cardRef.current?.getBoundingClientRect();
@@ -239,17 +292,22 @@ export function ProjectCard({ p, delay=0 }) {
         {p.img?<img src={`data:image/jpeg;base64,${p.img}`} alt={p.title} style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0,transition:"transform .5s ease",transform:hov?"scale(1.07)":"scale(1)"}}/>:<span style={{fontSize:52,animation:hov?"floatY 2s ease-in-out infinite":"none"}}>{p.emoji}</span>}
         {p.img&&<div style={{position:"absolute",inset:0,background:hov?"linear-gradient(180deg,transparent 30%,rgba(6,9,15,.7))":"linear-gradient(180deg,transparent 40%,rgba(6,9,15,.5))",transition:"background .3s"}}/>}
         <span style={{position:"absolute",top:12,right:12,fontFamily:"'Orbitron',monospace",fontSize:8,fontWeight:700,letterSpacing:2,padding:"3px 9px",borderRadius:2,textTransform:"uppercase",background:p.tagColor+"25",color:p.tagColor,border:`1px solid ${p.tagColor}60`,backdropFilter:"blur(4px)"}}>{p.tag}</span>
+        {p.videoUrl&&<button className="project-play-badge" onClick={e=>{e.stopPropagation();setVideoProject(p);}} aria-label={`Ver video de ${p.title}`}>▶</button>}
         {hov&&<div style={{position:"absolute",bottom:0,left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,${p.tagColor},transparent)`,animation:"shimmer 1.5s linear infinite"}}/>}
       </div>
       <div style={{padding:"18px 20px",flex:1,display:"flex",flexDirection:"column"}}>
         <div style={{fontFamily:"'Orbitron',monospace",fontSize:13,fontWeight:700,color:hov?"#fff":"#d0dae8",marginBottom:4,transition:"color .2s"}}>{p.title}</div>
         <div style={{fontSize:10,color:p.tagColor,letterSpacing:2,marginBottom:10,textTransform:"uppercase",opacity:.8}}>{p.genre}</div>
         <div style={{fontSize:13,color:"#6a7a8a",lineHeight:1.75,marginBottom:16,flex:1}}>{p.description}</div>
-        <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:p.repoUrl?14:0}}>
+        <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:(p.repoUrl||p.videoUrl)?14:0}}>
           {p.chips.map(c=><span key={c} style={{fontSize:9,letterSpacing:1,textTransform:"uppercase",padding:"3px 8px",borderRadius:2,background:"rgba(255,255,255,.04)",color:"#4a5a6a",border:"1px solid rgba(255,255,255,.07)",transition:"all .2s"}}>{c}</span>)}
         </div>
-        {p.repoUrl&&<RepoLink url={p.repoUrl}/>}
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+          <VideoButton project={p} onClick={()=>setVideoProject(p)}/>
+          {p.repoUrl&&<RepoLink url={p.repoUrl}/>}
+        </div>
       </div>
+      {videoProject&&<VideoModal project={videoProject} onClose={()=>setVideoProject(null)}/>}
     </div>
   );
 }
@@ -260,6 +318,7 @@ export function Carousel() {
   const total=items.length;
   const [active,setActive]=useState(0);
   const [trans,setTrans]=useState(false);
+  const [videoProject,setVideoProject]=useState(null);
   const goTo=idx=>{if(trans)return;setTrans(true);setTimeout(()=>{setActive((idx+total)%total);setTrans(false);},320);};
   useEffect(()=>{const id=setInterval(()=>setActive(a=>(a+1)%total),5800);return()=>clearInterval(id);},[]);
   const cur=items[active];
@@ -278,7 +337,10 @@ export function Carousel() {
           <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
             {cur.chips.map(c=><span key={c} style={{fontSize:9,letterSpacing:1,textTransform:"uppercase",padding:"2px 9px",borderRadius:2,background:"rgba(6,9,15,.8)",color:"#5a6a7a",border:"1px solid rgba(255,255,255,.08)"}}>{c}</span>)}
           </div>
-          {cur.repoUrl&&<RepoLink url={cur.repoUrl} label="Ver repositorio"/>}
+          <div style={{display:"flex",gap:10,flexWrap:"wrap",alignItems:"center"}}>
+            <VideoButton project={cur} onClick={()=>setVideoProject(cur)}/>
+            {cur.repoUrl&&<RepoLink url={cur.repoUrl} label="Ver repositorio"/>}
+          </div>
         </div>
         {[{d:-1,l:"‹",s:"left"},{d:1,l:"›",s:"right"}].map(({d,l,s})=>(
           <button className="carousel-arrow" key={s} onClick={()=>goTo(active+d)} style={{position:"absolute",top:"50%",[s]:16,transform:"translateY(-50%)",width:40,height:40,borderRadius:"50%",background:"rgba(0,0,0,.6)",border:"1px solid rgba(0,245,196,.25)",color:"#00f5c4",fontSize:22,cursor:"none",display:"flex",alignItems:"center",justifyContent:"center",zIndex:10,backdropFilter:"blur(6px)",transition:"all .2s"}} onMouseEnter={e=>{e.currentTarget.style.background="rgba(0,245,196,.15)";e.currentTarget.style.borderColor="#00f5c4";e.currentTarget.style.boxShadow="0 0 20px rgba(0,245,196,.3)";}} onMouseLeave={e=>{e.currentTarget.style.background="rgba(0,0,0,.6)";e.currentTarget.style.borderColor="rgba(0,245,196,.25)";e.currentTarget.style.boxShadow="none";}}>{l}</button>
@@ -294,6 +356,7 @@ export function Carousel() {
         </div>
         <span style={{fontFamily:"'Orbitron',monospace",fontSize:9,color:"#2a3a4a",letterSpacing:2}}>{String(active+1).padStart(2,"0")} / {String(total).padStart(2,"0")}</span>
       </div>
+      {videoProject&&<VideoModal project={videoProject} onClose={()=>setVideoProject(null)}/>}
     </div>
   );
 }

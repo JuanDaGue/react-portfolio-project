@@ -3,7 +3,7 @@ import { GLOBAL_CSS } from "./styles/globalCss";
 import { NAV_ITEMS, SOCIALS } from "./data/portfolioData";
 import { useAchievements, useFavicon, useSound } from "./hooks";
 import { AchievementToast, AchievementsButton, AchievementsPanel, CursorTrail, CustomCursor, KonamiEgg, LoadingScreen, MatrixRain, MatrixToggle, PageTransition, ParticleBackground, ScrollToTop, SnakeLauncher, SocialSidebar, VisitCounter } from "./components/portfolioComponents";
-import { PageAbout, PageAwards, PageBlog, PageContact, PageHome, PagePortfolio, PageReferences, PageServices, PageStack, PageTimeline } from "./pages/portfolioPages";
+import { PageAbout, PageAwards, PageBlog, PageCompactPortfolio, PageContact, PageHome, PagePortfolio, PageReferences, PageServices, PageStack, PageTimeline } from "./pages/portfolioPages";
 
 export default function App() {
   const [loaded,setLoaded]=useState(false);
@@ -11,6 +11,8 @@ export default function App() {
   const [navSolid,setNavSolid]=useState(false);
   const [light,setLight]=useState(false);
   const [matrix,setMatrix]=useState(false);
+  const [extended,setExtended]=useState(false);
+  const [isDesktop,setIsDesktop]=useState(()=>typeof window !== "undefined" ? window.matchMedia("(min-width: 901px)").matches : true);
   const [showAchievements,setShowAchievements]=useState(false);
   const { unlocked, unlock, toast } = useAchievements();
   const snd = useSound();
@@ -31,6 +33,14 @@ export default function App() {
     return()=>el.removeEventListener('scroll',s);
   },[loaded]);
 
+  useEffect(()=>{
+    const mq = window.matchMedia("(min-width: 901px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return()=>mq.removeEventListener?.("change", update);
+  },[]);
+
   // Scroll to top on page change + track achievements
   useEffect(()=>{
     document.getElementById('main-scroll')?.scrollTo({top:0,behavior:'smooth'});
@@ -44,6 +54,7 @@ export default function App() {
   if(!loaded) return <LoadingScreen onDone={()=>setLoaded(true)}/>;
 
   const pages={home:<PageHome setPage={setPage}/>,about:<PageAbout/>,services:<PageServices/>,portfolio:<PagePortfolio/>,timeline:<PageTimeline/>,blog:<PageBlog/>,awards:<PageAwards/>,stack:<PageStack/>,references:<PageReferences/>,contact:<PageContact/>};
+  const compactMode = isDesktop && !extended;
 
   const navBg  = light ? (navSolid?"rgba(240,244,248,.99)":"rgba(240,244,248,.88)") : (navSolid?"rgba(6,9,15,.98)":"rgba(6,9,15,.85)");
   const navBorder = light ? (navSolid?"rgba(0,150,120,.2)":"rgba(0,150,120,.06)") : (navSolid?"rgba(0,245,196,.15)":"rgba(0,245,196,.06)");
@@ -71,20 +82,25 @@ export default function App() {
       <nav className="top-nav" style={{flexShrink:0,position:"relative",zIndex:100,background:navBg,backdropFilter:"blur(20px)",borderBottom:`1px solid ${navBorder}`,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 16px 0 48px",height:58,transition:"background .3s,border-color .3s",boxShadow:navSolid?(light?"0 4px 20px rgba(0,0,0,.1)":"0 4px 30px rgba(0,0,0,.4)"):"none"}}>
         <div className="nav-brand" style={{display:"flex",alignItems:"center",gap:14}}>
           <div style={{fontFamily:"'Orbitron',monospace",fontSize:15,fontWeight:900,letterSpacing:3,cursor:"none",transition:"text-shadow .2s"}}
-            className="glow-text" onClick={()=>{setPage("home");snd.nav();}}
+            className="glow-text" onClick={()=>{compactMode ? document.getElementById('main-scroll')?.scrollTo({top:0,behavior:'smooth'}) : setPage("home");snd.nav();}}
             onMouseEnter={e=>e.currentTarget.style.textShadow=light?"0 0 20px rgba(0,150,120,.5)":"0 0 20px rgba(0,245,196,.6)"}
             onMouseLeave={e=>e.currentTarget.style.textShadow="none"}>JDG</div>
           <VisitCounter/>
         </div>
 
         <div className="nav-links" style={{display:"flex",alignItems:"center",gap:2,flexWrap:"wrap"}}>
-          {NAV_ITEMS.map(n=>(
+          {!compactMode && NAV_ITEMS.map(n=>(
             <button key={n.id} onClick={()=>{setPage(n.id);snd.nav();}} onMouseEnter={snd.hover}
               className={`nav-btn nav-${n.id}${page===n.id?" active":""}`}
               style={{color:page===n.id?(light?"#007a62":"#00f5c4"):(light?"#3a5060":"#4a5a6a")}}>
               <n.Ico/>{n.label}
             </button>
           ))}
+          {isDesktop && (
+            <button className="btn-ghost compact-toggle" onClick={()=>{setExtended(v=>!v);snd.click();}} onMouseEnter={snd.hover}>
+              {compactMode ? "Versión extendida" : "Versión resumida"}
+            </button>
+          )}
 
           {/* Theme toggle */}
           <div style={{marginLeft:10,display:"flex",alignItems:"center",gap:8}}>
@@ -99,8 +115,8 @@ export default function App() {
       {/* SCROLLABLE MAIN */}
       <div id="main-scroll" style={{flex:1,overflowY:"auto",position:"relative",zIndex:1}}>
         <main className="app-main" style={{paddingRight:48,minHeight:"calc(100vh - 58px)"}}>
-          <PageTransition pageKey={page}>
-            {pages[page]}
+          <PageTransition pageKey={compactMode?"compact":page}>
+            {compactMode ? <PageCompactPortfolio setExtended={setExtended}/> : pages[page]}
           </PageTransition>
         </main>
         <footer className="app-footer" style={{borderTop:`1px solid ${light?"rgba(0,150,120,.1)":"rgba(0,245,196,.06)"}`,padding:"22px 52px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12,background:light?"rgba(230,238,248,.8)":"rgba(6,9,15,.8)"}}>
