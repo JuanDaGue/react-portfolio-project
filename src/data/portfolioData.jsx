@@ -18,8 +18,16 @@ export const PROJECTS = [
   { id:5, title:"FreakFall", genre:"Accion · Plataformas · Unreal",
     description:"Proyecto actual en Unreal Engine enfocado en gameplay, movimiento, caida y sensacion de control. Estoy prototipando mecanicas con Blueprints y C++ para pulir camara, ritmo y sistemas base.",
     tag:"En desarrollo", tagColor:"#a78bfa", emoji:"🌀", repoUrl:"https://github.com/JuanDaGue", videoUrl:"https://www.youtube.com/watch?v=Wi0gqp7ikoA",
-    chips:["Unreal Engine","Blueprints","C++","Gameplay","FreakFall"] },
+    chips:["Unreal Engine","Blueprints","C++","Gameplay","FreakFall"], imageUrl:"/freakfall.png" },
 ];
+
+export const PROJECT_IMAGE_URLS = {
+  1: "/TheVoiceHead.png",
+  2: "/metro-defense.png",
+  3: "/PuzzleGame.jpeg",
+  5: "/freakfall.png",
+};
+
 export const SKILLS = [
   { cat:"Motores", items:[{name:"Unity",pct:90},{name:"Unreal Engine",pct:84},{name:"Blueprints",pct:82}], color:"#00f5c4" },
   { cat:"Código",  items:[{name:"C#",pct:88},{name:"JavaScript",pct:85},{name:"Python",pct:70}], color:"#5b9cf6" },
@@ -59,7 +67,7 @@ export const IcoMail  = ({size=15})=><svg width={size} height={size} viewBox="0 
 
 export const SOCIALS = [
   { id:"instagram", label:"Instagram", href:"https://instagram.com/tu_usuario",  color:"#e1306c", Ico: IcoInstagram },
-  { id:"youtube",   label:"YouTube",   href:"https://youtube.com/@tu_canal",     color:"#ff0000", Ico: IcoYouTube },
+  { id:"youtube",   label:"YouTube",   href:"https://www.youtube.com/@hades_warroir9147", color:"#ff0000", Ico: IcoYouTube },
   { id:"discord",   label:"Discord",   href:"https://discord.gg/tu_servidor",    color:"#5865f2", Ico: IcoDiscord },
   { id:"linkedin",  label:"LinkedIn",  href:"https://www.linkedin.com/in/juan-david-guerrero-uchima-b94ab3226/", color:"#0a66c2", Ico: IcoLinkedIn },
   { id:"itchio",    label:"itch.io",   href:"https://hades2019.itch.io/",        color:"#fa5c5c", Ico: IcoItchio },

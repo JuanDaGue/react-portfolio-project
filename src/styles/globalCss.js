@@ -227,6 +227,34 @@ export const GLOBAL_CSS = `
     height: 100%;
     border: 0;
   }
+  .project-modal-backdrop { position:fixed; inset:0; z-index:100001; padding:24px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.84); backdrop-filter:blur(14px); animation:fadeIn .18s ease both; }
+  .project-modal-backdrop,.project-modal-backdrop * { cursor:auto !important; }
+  .project-modal-backdrop button,.project-modal-backdrop a { cursor:pointer !important; }
+  body:has(.project-modal-backdrop) .custom-cursor-dot,body:has(.project-modal-backdrop) .custom-cursor-ring { display:none !important; }
+  .project-modal-panel { width:min(1200px,96vw); max-height:92vh; overflow:hidden; border-radius:14px; border:1px solid rgba(0,245,196,.24); background:linear-gradient(145deg,#090e16,#0d1420); box-shadow:0 28px 90px rgba(0,0,0,.82),0 0 42px rgba(0,245,196,.12); }
+  .project-modal-head { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:17px 18px 15px 22px; border-bottom:1px solid rgba(0,245,196,.12); }
+  .project-modal-title { margin:0; font-family:'Orbitron',monospace; font-size:clamp(16px,2.4vw,23px); font-weight:800; color:#e8eef8; }
+  .project-modal-genre { margin-top:6px; font-family:'Orbitron',monospace; font-size:8px; letter-spacing:2px; text-transform:uppercase; }
+  .project-modal-scroll { max-height:calc(92vh - 86px); overflow-y:auto; }
+  .project-modal-cover { height:min(48vw,460px); min-height:240px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#050810,#0e0520); overflow:hidden; }
+  .project-modal-cover img { width:100%; height:100%; object-fit:cover; }
+  .project-modal-cover span { font-size:96px; }
+  .project-modal-content { padding:28px; }
+  .project-modal-summary { margin:0 0 24px; color:#9bacbd; font-size:15px; line-height:1.8; }
+  .project-modal-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+  .project-modal-grid section,.project-modal-tech { padding:18px; border:1px solid rgba(0,245,196,.12); border-radius:8px; background:rgba(255,255,255,.025); }
+  .project-modal-grid h3,.project-modal-tech h3 { margin:0 0 9px; font-family:'Orbitron',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#00f5c4; }
+  .project-modal-grid p { margin:0; color:#7f91a4; font-size:13px; line-height:1.75; }
+  .project-modal-tech { margin-top:14px; }
+  .project-modal-tech div,.project-modal-actions { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .project-modal-tech span { padding:4px 9px; border:1px solid rgba(255,255,255,.1); border-radius:3px; color:#b9c8d7; font-size:10px; letter-spacing:1px; background:rgba(255,255,255,.04); }
+  .project-modal-actions { margin-top:22px; }
+  .project-card { cursor:pointer; }
+  .project-card:focus-visible { outline:2px solid #00f5c4; outline-offset:4px; }
+  .light .project-modal-panel { background:linear-gradient(145deg,#ffffff,#f4f8ff); border-color:rgba(0,150,120,.18); }
+  .light .project-modal-title { color:#142235; }
+  .light .project-modal-summary,.light .project-modal-grid p { color:#52677d; }
+  .light .project-modal-grid section,.light .project-modal-tech { background:rgba(0,150,120,.04); border-color:rgba(0,150,120,.14); }
   .light .video-action-btn {
     background: rgba(255,61,107,.08);
     color: #b51f4b;
@@ -680,6 +708,11 @@ export const GLOBAL_CSS = `
   }
 
   @media (max-width: 640px) {
+    .project-modal-backdrop { padding:14px !important; }
+    .project-modal-panel { width:100% !important; }
+    .project-modal-head { padding:14px !important; }
+    .project-modal-content { padding:18px !important; }
+    .project-modal-grid { grid-template-columns:1fr !important; }
     body { overflow-x: hidden; }
     .page-shell {
       padding: 28px 16px 42px !important;

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { GLOBAL_CSS } from "../styles/globalCss";
-import { ALL_ACHIEVEMENTS, PROJECTS, SOCIALS } from "../data/portfolioData";
+import { ALL_ACHIEVEMENTS, PROJECT_IMAGE_URLS, PROJECTS, SOCIALS } from "../data/portfolioData";
 
 export function CustomCursor() {
   const dotRef = useRef(null);
@@ -273,10 +274,48 @@ export function VideoButton({ project, onClick }) {
   );
 }
 
+const CASE_STUDIES = {
+  1: { problem:"Traducir experiencias de salud mental a mecánicas jugables sin perder la sensibilidad narrativa del tema.", role:"Diseño de gameplay, programación en Unity y construcción de la experiencia narrativa.", process:"Prototipé sistemas aleatorios y momentos de exploración, los ajusté a la progresión de Lucy y pulí la relación entre ritmo, ambiente y narrativa.", results:"Un proyecto académico completo con una identidad propia, reconocido por su propuesta narrativa y sus mecánicas." },
+  2: { problem:"Crear una experiencia móvil de puzles fácil de entender y con un ritmo ágil bajo presión de tiempo.", role:"Desarrollo de mecánicas, integración de sistemas de juego y pruebas de balance.", process:"Construí el ciclo de grupos de tres, temporizador y retroalimentación visual; después ajusté dificultad, objetivos y ritmo de partida.", results:"Un prototipo móvil centrado en sesiones cortas, reglas claras y rejugabilidad." },
+  3: { problem:"Convertir conceptos de astrobiología en una experiencia inmersiva y comprensible para público educativo.", role:"Diseño de la experiencia VR, programación en Unity y adaptación de contenido científico a gameplay.", process:"Partí de criterios reales de habitabilidad y los llevé a exploración, interacción y retos dentro de realidad virtual.", results:"Un prototipo edu-tech que une formación en física y astronomía con diseño de experiencias interactivas." },
+  4: { problem:"Diseñar un tower defense colaborativo en una Medellín postapocalíptica con lectura clara del campo de juego.", role:"Programación en Unity, apoyo a sistemas de juego y colaboración con diseño y arte.", process:"Trabajé sobre la lógica de enemigos y defensas, integrando los sistemas con el equipo y validando la jugabilidad por iteraciones.", results:"Proyecto colaborativo finalista de game jam, destacado por creatividad y jugabilidad." },
+  5: { problem:"Lograr una sensación de caída y movimiento precisa que se sienta intensa, legible y divertida.", role:"Diseño de gameplay, prototipado con Blueprints y bases de programación en C++.", process:"Estoy iterando movimiento, cámara, ritmo y sistemas base en prototipos rápidos para validar cada sensación antes de escalarla.", results:"Proyecto en desarrollo con una base técnica orientada a pulir control, cámara y sensación de juego." },
+};
+
+export function ProjectModal({ project, onClose }) {
+  useEffect(() => {
+    const onKey = e => { if(e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, []);
+  if(!project) return null;
+  const study = CASE_STUDIES[project.id] || {};
+  return createPortal(<div className="project-modal-backdrop" role="presentation" onMouseDown={e=>{e.stopPropagation();onClose();}}>
+    <article className="project-modal-panel" role="dialog" aria-modal="true" aria-label={`Caso de estudio: ${project.title}`} onMouseDown={e=>e.stopPropagation()} onClick={e=>e.stopPropagation()}>
+      <header className="project-modal-head"><div><div className="video-modal-kicker">Caso de estudio</div><h2 className="project-modal-title">{project.title}</h2><div className="project-modal-genre" style={{color:project.tagColor}}>{project.genre}</div></div><button className="video-modal-close" onClick={e=>{e.stopPropagation();onClose();}} aria-label={`Cerrar caso de estudio de ${project.title}`}>×</button></header>
+      <div className="project-modal-scroll">
+        {project.videoUrl ? <div className="video-frame-wrap"><iframe src={getYouTubeEmbedUrl(project.videoUrl)} title={`Video de ${project.title}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /></div> : <div className="project-modal-cover">{getProjectImageSrc(project) ? <img src={getProjectImageSrc(project)} alt={project.title} /> : <span>{project.emoji}</span>}</div>}
+        <div className="project-modal-content"><p className="project-modal-summary">{project.description}</p><div className="project-modal-grid"><section><h3>El problema</h3><p>{study.problem}</p></section><section><h3>Mi rol</h3><p>{study.role}</p></section><section><h3>Proceso</h3><p>{study.process}</p></section><section><h3>Resultados</h3><p>{study.results}</p></section></div><section className="project-modal-tech"><h3>Tecnologías</h3><div>{project.chips.map(chip=><span key={chip}>{chip}</span>)}</div></section><div className="project-modal-actions">{project.videoUrl && <a className="btn-primary" href={project.videoUrl} target="_blank" rel="noreferrer">Ver video en YouTube ↗</a>}{project.demoUrl && <a className="btn-ghost" href={project.demoUrl} target="_blank" rel="noreferrer">Probar demo ↗</a>}{project.repoUrl && <RepoLink url={project.repoUrl} label="Ver repositorio" />}</div></div>
+      </div>
+    </article>
+  </div>, document.body);
+}
+
+function getProjectImageSrc(project) {
+  const image = PROJECT_IMAGE_URLS[project.id] || project.imageUrl || project.img;
+  if(!image) return null;
+  return image.startsWith("/") ? image : `data:image/jpeg;base64,${image}`;
+}
+
 export function ProjectCard({ p, delay=0 }) {
   const [hov,setHov]=useState(false);
   const [tilt,setTilt]=useState({x:0,y:0});
-  const [videoProject,setVideoProject]=useState(null);
+  const [selectedProject,setSelectedProject]=useState(null);
   const cardRef=useRef(null);
   const onMove = e => {
     const r = cardRef.current?.getBoundingClientRect();
@@ -286,13 +325,13 @@ export function ProjectCard({ p, delay=0 }) {
     setTilt({x:y*8,y:-x*8});
   };
   return(
-    <div className="theme-card project-card" ref={cardRef} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>{setHov(false);setTilt({x:0,y:0});}} onMouseMove={onMove}
+    <div className="theme-card project-card" ref={cardRef} role="button" tabIndex={0} aria-label={`Abrir caso de estudio de ${p.title}`} onClick={()=>setSelectedProject(p)} onKeyDown={e=>{if(e.key==="Enter" || e.key===" "){e.preventDefault();setSelectedProject(p);}}} onMouseEnter={()=>setHov(true)} onMouseLeave={()=>{setHov(false);setTilt({x:0,y:0});}} onMouseMove={onMove}
       style={{background:hov?"linear-gradient(145deg,#0e1520,#111825)":"#0a0f18",border:`1px solid ${hov?p.tagColor+"55":"rgba(0,245,196,.1)"}`,borderRadius:12,overflow:"hidden",transform:hov?`perspective(600px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-6px)`:"perspective(600px) rotateX(0) rotateY(0) translateY(0)",transition:"transform .2s ease,border-color .25s,background .25s,box-shadow .25s",boxShadow:hov?`0 20px 50px rgba(0,0,0,.6),0 0 30px ${p.tagColor}15`:"0 4px 20px rgba(0,0,0,.3)",display:"flex",flexDirection:"column",animation:`fadeUp .5s ease ${delay}s both`}}>
       <div style={{height:185,position:"relative",overflow:"hidden",display:"flex",alignItems:"center",justifyContent:"center",background:"linear-gradient(135deg,#050810,#0e0520)"}}>
-        {p.img?<img src={`data:image/jpeg;base64,${p.img}`} alt={p.title} style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0,transition:"transform .5s ease",transform:hov?"scale(1.07)":"scale(1)"}}/>:<span style={{fontSize:52,animation:hov?"floatY 2s ease-in-out infinite":"none"}}>{p.emoji}</span>}
-        {p.img&&<div style={{position:"absolute",inset:0,background:hov?"linear-gradient(180deg,transparent 30%,rgba(6,9,15,.7))":"linear-gradient(180deg,transparent 40%,rgba(6,9,15,.5))",transition:"background .3s"}}/>}
+        {getProjectImageSrc(p)?<img src={getProjectImageSrc(p)} alt={p.title} style={{width:"100%",height:"100%",objectFit:"cover",position:"absolute",inset:0,transition:"transform .5s ease",transform:hov?"scale(1.07)":"scale(1)"}}/>:<span style={{fontSize:52,animation:hov?"floatY 2s ease-in-out infinite":"none"}}>{p.emoji}</span>}
+        {getProjectImageSrc(p)&&<div style={{position:"absolute",inset:0,background:hov?"linear-gradient(180deg,transparent 30%,rgba(6,9,15,.7))":"linear-gradient(180deg,transparent 40%,rgba(6,9,15,.5))",transition:"background .3s"}}/>}
         <span style={{position:"absolute",top:12,right:12,fontFamily:"'Orbitron',monospace",fontSize:8,fontWeight:700,letterSpacing:2,padding:"3px 9px",borderRadius:2,textTransform:"uppercase",background:p.tagColor+"25",color:p.tagColor,border:`1px solid ${p.tagColor}60`,backdropFilter:"blur(4px)"}}>{p.tag}</span>
-        {p.videoUrl&&<button className="project-play-badge" onClick={e=>{e.stopPropagation();setVideoProject(p);}} aria-label={`Ver video de ${p.title}`}>▶</button>}
+        {p.videoUrl&&<button className="project-play-badge" onClick={e=>{e.stopPropagation();setSelectedProject(p);}} aria-label={`Abrir caso de estudio de ${p.title}`}>▶</button>}
         {hov&&<div style={{position:"absolute",bottom:0,left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,${p.tagColor},transparent)`,animation:"shimmer 1.5s linear infinite"}}/>}
       </div>
       <div style={{padding:"18px 20px",flex:1,display:"flex",flexDirection:"column"}}>
@@ -302,19 +341,16 @@ export function ProjectCard({ p, delay=0 }) {
         <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:(p.repoUrl||p.videoUrl)?14:0}}>
           {p.chips.map(c=><span key={c} style={{fontSize:9,letterSpacing:1,textTransform:"uppercase",padding:"3px 8px",borderRadius:2,background:"rgba(255,255,255,.04)",color:"#4a5a6a",border:"1px solid rgba(255,255,255,.07)",transition:"all .2s"}}>{c}</span>)}
         </div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
-          <VideoButton project={p} onClick={()=>setVideoProject(p)}/>
-          {p.repoUrl&&<RepoLink url={p.repoUrl}/>}
-        </div>
+        <div style={{fontFamily:"Orbitron,monospace",fontSize:8,fontWeight:700,letterSpacing:2,color:p.tagColor,textTransform:"uppercase"}}>Ver caso de estudio →</div>
       </div>
-      {videoProject&&<VideoModal project={videoProject} onClose={()=>setVideoProject(null)}/>}
+      {selectedProject&&<ProjectModal project={selectedProject} onClose={()=>setSelectedProject(null)}/>}
     </div>
   );
 }
 
 /* ─── CAROUSEL ────────────────────────────────────────────── */
 export function Carousel() {
-  const items=PROJECTS.filter(p=>p.img);
+  const items=PROJECTS.filter(p=>getProjectImageSrc(p));
   const total=items.length;
   const [active,setActive]=useState(0);
   const [trans,setTrans]=useState(false);
@@ -326,7 +362,7 @@ export function Carousel() {
   return(
     <div className="portfolio-carousel" style={{borderRadius:14,overflow:"hidden",marginBottom:44,border:"1px solid rgba(0,245,196,.18)",boxShadow:"0 24px 80px rgba(0,0,0,.6),0 0 40px rgba(0,245,196,.04)"}}>
       <div className="carousel-stage" style={{position:"relative",height:"clamp(240px,38vw,420px)",overflow:"hidden",opacity:trans?0:1,transition:"opacity .32s"}}>
-        <img src={`data:image/jpeg;base64,${cur.img}`} alt={cur.title} style={{width:"100%",height:"100%",objectFit:"cover",transform:trans?"scale(1.05)":"scale(1)",transition:"transform .6s ease"}}/>
+        <img src={getProjectImageSrc(cur)} alt={cur.title} style={{width:"100%",height:"100%",objectFit:"cover",transform:trans?"scale(1.05)":"scale(1)",transition:"transform .6s ease"}}/>
         <div style={{position:"absolute",inset:0,background:"linear-gradient(105deg,rgba(6,9,15,.92) 0%,rgba(6,9,15,.4) 50%,rgba(6,9,15,.7) 100%)"}}/>
         <div style={{position:"absolute",inset:0,backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px)",pointerEvents:"none"}}/>
         <div className="carousel-content" style={{position:"absolute",inset:0,padding:"32px 40px",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
